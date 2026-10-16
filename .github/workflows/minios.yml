@@ -1,0 +1,14 @@
+name: MiniOS-Build
+on: workflow_dispatch
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get install -y genisoimage unzip
+      - run: rm -rf iso_icerik && mkdir iso_icerik && unzip -q minios-os.zip -d iso_icerik
+      - run: genisoimage -o MiniOS.iso -V MiniOS -R -J iso_icerik
+      - uses: actions/upload-artifact@v4
+        with:
+          name: MiniOS-ISO
+          path: MiniOS.iso
