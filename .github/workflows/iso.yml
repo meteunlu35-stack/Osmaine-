@@ -1,22 +1,14 @@
-name: ISO Yap
-on: [push]
+name: Create iso.yml
+on: workflow_dispatch
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Araclari kur
-        run: sudo apt-get update && sudo apt-get install -y genisoimage unzip
-      - name: Zipi ac
-        run: |
-          if [ -f minios-os.zip ]; then
-            unzip -o minios-os.zip
-            rm minios-os.zip
-          fi
-      - name: ISO yap
-        run: genisoimage -o MiniOS.iso -V MiniOS -R -J.
-      - name: Kaydet
-        uses: actions/upload-artifact@v4
+      - run: sudo apt-get update && sudo apt-get install -y genisoimage unzip
+      - run: rm -rf isodosyalari && mkdir isodosyalari && unzip -q minios-os.zip -d isodosyalari
+      - run: genisoimage -o MiniOS.iso -V MiniOS -R -J isodosyalari
+      - uses: actions/upload-artifact@v4
         with:
           name: MiniOS-ISO
           path: MiniOS.iso
